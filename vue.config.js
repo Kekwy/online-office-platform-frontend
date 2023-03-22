@@ -1,3 +1,5 @@
+// 本文件更改之后需要重启项目
+
 const {defineConfig} = require('@vue/cli-service')
 module.exports = defineConfig({
     transpileDependencies: true
