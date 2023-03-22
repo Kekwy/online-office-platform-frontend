@@ -23,7 +23,7 @@ proxyObj['/'] = {
 // 通过 node.js 实现转发
 module.exports = {
     devServer: {
-        host: '/localhost',
+        host: 'localhost',
         port: 8080,
         proxy: proxyObj
     }

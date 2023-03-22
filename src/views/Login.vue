@@ -81,4 +81,9 @@ export default {
   margin: 0 0 15px 0;
 }
 
+.el-form-item__content {
+  display: flex;
+  align-items: center;
+}
+
 </style>
