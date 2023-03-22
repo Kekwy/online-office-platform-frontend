@@ -38,3 +38,15 @@ axios.interceptors.response.use(success => {
         }
     }
 });
+
+// post 请求的前置路径
+let base = '';
+
+// 封装请求
+export const postRequest = (url, params)=> {
+    return axios({
+        method:'post',
+        url:'${base}${url}',
+        data: params
+    });
+}
