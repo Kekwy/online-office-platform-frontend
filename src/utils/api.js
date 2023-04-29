@@ -4,6 +4,17 @@ import {Message} from "element-ui";
 // 导入路由
 import router from "../router";
 
+// 请求拦截器
+axios.interceptors.request.use(config => {
+    // 如果存在 token，请求携带这个 token
+    if (window.sessionStorage.getItem('tokenStr')) {
+        config.headers['Authorization'] = window.sessionStorage.getItem('tokenStr');
+    }
+    return config;
+}, error => {
+    console.log(error);
+})
+
 // 进行响应拦截对响应进行统一的处理
 // success 表示成功访问到后端的接口，并不一定表示目标操作成功
 axios.interceptors.response.use(success => {
@@ -29,7 +40,8 @@ axios.interceptors.response.use(success => {
     } else if (error.response.code === 401) {
         Message.error({message: '尚未登录，请先登录。'});
         // 通过路由跳转至登录页
-        router.replace('/').then(r => {});
+        router.replace('/').then(r => {
+        });
     } else {
         if (error.response.data.message) {
             Message.error({message: error.response.data.message});
@@ -43,10 +55,34 @@ axios.interceptors.response.use(success => {
 let base = '';
 
 // 封装请求
-export const postRequest = (url, params)=> {
+export const postRequest = (url, params) => {
     return axios({
-        method:'post',
-        url:'${base}${url}',
-        data: params
+        method: 'post',
+        url: `${base}${url}`,
+        data: params,
+    });
+}
+
+export const putRequest = (url, params) => {
+    return axios({
+        method: 'put',
+        url: `${base}${url}`,
+        data: params,
+    });
+}
+
+export const getRequest = (url, params) => {
+    return axios({
+        method: 'get',
+        url: `${base}${url}`,
+        data: params,
+    });
+}
+
+export const deleteRequest = (url, params) => {
+    return axios({
+        method: 'delete',
+        url: `${base}${url}`,
+        data: params,
     });
 }

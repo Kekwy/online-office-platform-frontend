@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
+    <el-form :rules="rules"
+             v-loading="loading"
+             ref="loginForm"
+             :model="loginForm"
+             class="loginContainer">
       <h3 class="loginTitle">系统登录</h3>
       <el-form-item prop="username">
         <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名"/>
@@ -20,17 +24,19 @@
 </template>
 
 <script>
+
 export default {
   name: "Login",
   data() {
     return {
       // 加入 time 参数避免每次点击或访问出现的是同一张验证码
-      captchaUrl: '/captcha?time='+new Date(),
+      captchaUrl: '/captcha?time=' + new Date(),
       loginForm: {
         username: 'admin',
         password: '123',
         code: ''
       },
+      loading: false,
       checked: true,
       rules: {
         username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
@@ -41,13 +47,22 @@ export default {
   },
   methods: {
     updateCaptcha() {
-      this.captchaUrl = '/captcha?time='+new Date();
+      this.captchaUrl = '/captcha?time=' + new Date();
     },
     submitLogin() {
       this.$refs.loginForm.validate((isValid) => {
         if (isValid) {
           // 使用响应拦截器对请求进行封装，避免反复编写 axios 代码
-          alert(1111);
+          // alert(1111);
+          this.loading = true;
+          this.postRequest('/login', this.loginForm).then(resp => {
+            if (resp) {
+              this.loading = false;
+              const tokenStr = resp.obj.tokenHead+resp.obj.token;
+              window.sessionStorage.setItem('tokenStr', tokenStr);
+              this.$router.replace('/home');
+            }
+          })
         } else {
           console.log('error submit!!');
           this.$message.error('请输入所有字段');
