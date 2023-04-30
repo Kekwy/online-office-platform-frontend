@@ -9,7 +9,7 @@ export default new Vuex.Store({
     },
     // 同步执行
     mutations: {
-        initRouters(state, data) {
+        initRoutes(state, data) {
             state.routes = data;
         }
     },
